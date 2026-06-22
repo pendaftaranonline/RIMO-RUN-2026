@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pembayaran QRIS</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#000;
+color:#fff;
+font-family:'Inter',sans-serif;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:25px;
+}
+
+.container{
+width:100%;
+max-width:700px;
+text-align:center;
+}
+
+/* TIMER */
+
+.label{
+font-size:11px;
+letter-spacing:4px;
+color:#666;
+margin-bottom:10px;
+}
+
+#timer{
+font-size:clamp(54px,8vw,84px);
+font-weight:800;
+letter-spacing:-3px;
+margin-bottom:40px;
+transition:.3s;
+}
+
+/* TITLE */
+
+.title{
+font-size:clamp(26px,4vw,36px);
+font-weight:700;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#9c9c9c;
+font-size:15px;
+line-height:1.8;
+margin-bottom:35px;
+}
+
+/* QR */
+
+.qr-wrap{
+display:flex;
+justify-content:center;
+margin-bottom:30px;
+}
+
+.qr-box{
+background:#fff;
+padding:16px;
+border-radius:22px;
+
+box-shadow:
+0 0 0 1px rgba(255,255,255,.05),
+0 10px 40px rgba(255,255,255,.08);
+}
+
+.qr-box img{
+width:min(340px,80vw);
+display:block;
+border-radius:12px;
+}
+
+/* STEPS */
+
+.steps{
+margin-top:25px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+.step{
+padding:18px 12px;
+border:1px solid rgba(255,255,255,.08);
+border-radius:16px;
+background:rgba(255,255,255,.02);
+}
+
+.step-number{
+font-size:22px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.step-text{
+font-size:13px;
+color:#bdbdbd;
+line-height:1.6;
+}
+
+/* BUTTON */
+
+#paidBtn{
+display:none;
+margin-top:30px;
+
+padding:14px 24px;
+
+border:none;
+border-radius:12px;
+
+background:#fff;
+color:#000;
+
+font-weight:700;
+font-size:14px;
+
+cursor:pointer;
+transition:.25s;
+}
+
+#paidBtn:hover{
+transform:translateY(-2px);
+}
+
+.footer{
+margin-top:25px;
+font-size:12px;
+color:#666;
+}
+
+@media(max-width:768px){
+
+.steps{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:480px){
+
+.steps{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="label">
+BATAS WAKTU PEMBAYARAN
+</div>
+
+<div id="timer">
+00:30
+</div>
+
+<div class="title">
+PEMBAYARAN QRIS
+</div>
+
+<div class="subtitle">
+Scan kode QR menggunakan aplikasi Mobile Banking atau E-Wallet yang mendukung QRIS.
+</div>
+
+<div class="qr-wrap">
+<div class="qr-box">
+<img src="qris-pembayaran.png" alt="QRIS">
+</div>
+</div>
+
+<button id="paidBtn">
+✓ Saya Telah Melakukan Pembayaran
+</button>
+
+<div class="steps">
+
+<div class="step">
+<div class="step-number">①</div>
+<div class="step-text">
+Buka aplikasi pembayaran Anda
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">②</div>
+<div class="step-text">
+Scan kode QR yang ditampilkan
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">③</div>
+<div class="step-text">
+Selesaikan transaksi pembayaran
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">④</div>
+<div class="step-text">
+Klik tombol konfirmasi pembayaran
+</div>
+</div>
+
+</div>
+
+<div class="footer">
+Halaman akan berakhir otomatis ketika waktu pembayaran habis.
+</div>
+
+</div>
+
+<script>
+
+let total = 30;
+
+const timer = document.getElementById("timer");
+const btn = document.getElementById("paidBtn");
+
+function updateTimer(){
+
+const m = Math.floor(total/60);
+const s = total%60;
+
+timer.textContent =
+String(m).padStart(2,'0')
++
+":"
++
+String(s).padStart(2,'0');
+
+}
+
+updateTimer();
+
+const countdown = setInterval(()=>{
+
+total--;
+
+updateTimer();
+
+if(total <= 10){
+btn.style.display = "inline-block";
+timer.style.color = "#ffcc00";
+}
+
+if(total <= 5){
+timer.style.color = "#ff5c5c";
+}
+
+if(total <= 0){
+
+clearInterval(countdown);
+
+window.location.href="failed.html";
+
+}
+
+},1000);
+
+btn.addEventListener("click",()=>{
+
+alert(
+"Pembayaran telah dikonfirmasi.\n\nSilakan kembali ke halaman sebelumnya untuk melanjutkan proses."
+);
+
+try{
+window.close();
+}catch(e){}
+
+});
+
+</script>
+
+</body>
+</html>
